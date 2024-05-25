@@ -13,10 +13,10 @@ __global__ void scan_kernel(float* input, float* output, float* partialSums, uns
 
     for (unsigned int stride = 1; stride <= BLOCK_DIM / 2; stride *= 2) {
         if (threadIdx.x >= stride) {
-            outbuffer_s[threadIdx.x] = inbuffer_s[threadIdx.x] + inbuffer_s[threadIdx.x - stride];
+            outBuffer_s[threadIdx.x] = inBuffer_s[threadIdx.x] + inBuffer_s[threadIdx.x - stride];
         } 
         else {
-            outbuffer_s[threadIdx.x] = inbuffer_s[threadIdx.x];
+            outBuffer_s[threadIdx.x] = inBuffer_s[threadIdx.x];
         }
         __syncthreads();
         float* tmp = inBuffer_s;
@@ -27,5 +27,5 @@ __global__ void scan_kernel(float* input, float* output, float* partialSums, uns
     if (threadIdx.x == BLOCK_DIM - 1) {
         partialSums[blockIdx.x] = buffer_s[threadIdx.x];
     }
-    output[i] = inbuffer_s[threadIdx.x];
+    output[i] = inBuffer_s[threadIdx.x];
 }
